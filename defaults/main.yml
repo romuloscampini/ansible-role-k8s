@@ -1,0 +1,6 @@
+---
+k8s_repo_name: "kubernetes"
+k8s_yum_packages:
+  - kubelet
+  - kubeadm
+  - kubectl

@@ -1,0 +1,28 @@
+---
+- name: copy k8s repo
+  copy:
+    src: etc/yum.repos.d/kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+    mode: 0644
+
+- name: yum | install yum-utils package
+  yum:
+    name: yum-utils
+    state: present
+
+- name: yum | install docker packages
+  yum:
+    name: "{{ item }}"
+    state: present
+    disable_excludes: "{{ k8s_repo_name }}"
+  loop: "{{ k8s_yum_packages }}"
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
+- name: Enable and start kubelet service
+  systemd:
+    name: kubelet
+    state: started
+    enabled: yes
